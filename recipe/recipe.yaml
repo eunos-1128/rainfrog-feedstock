@@ -1,14 +1,14 @@
 context:
   name: rainfrog
-  version: "v0.2.13"
+  version: "0.2.15"
 
 package:
   name: ${{ name|lower }}
   version: ${{ version }}
 
 source:
-  url: https://github.com/achristmascarl/${{ name }}/archive/refs/tags/${{ version }}.tar.gz
-  sha256: e45c13452026d9fe2f5b5db58053704e2c6846b1d9fe182c0b70a296f09b9dba
+  url: https://github.com/achristmascarl/${{ name }}/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: 166471abc5c0ec6dab47c56b6a6dfaa16efcb83e7dd826c489c0db96d19ab9f0
 
 build:
   script:
@@ -26,7 +26,7 @@ requirements:
 
 tests:
   - script:
-    - rainfrog --version
+      - rainfrog --version
 
 about:
   homepage: https://crates.io/crates/rainfrog
