@@ -12,11 +12,6 @@ source:
 
 build:
   script:
-    - |
-      if [[ "$target_platform" == "osx-arm64" ]]; then
-        export LIBICONV_LIB_DIR="${PREFIX}/lib"
-        export LIBICONV_INCLUDE_DIR="${PREFIX}/include"
-      fi
     - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
     - cargo install --no-track --locked --root ${{ PREFIX }} --path .
 
