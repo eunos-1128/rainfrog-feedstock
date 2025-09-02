@@ -1,6 +1,6 @@
 context:
   name: rainfrog
-  version: "0.3.6"
+  version: "0.3.7"
 
 package:
   name: ${{ name|lower }}
@@ -8,9 +8,10 @@ package:
 
 source:
   url: https://github.com/achristmascarl/${{ name }}/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: cbe7f382d43f522a011b15459b4583d46c004f0a483b53d55030a579c47b77f7
+  sha256: 7e6457c9041b2b28bd77324e76210bf1ff8f23b58ff6980d9bccc142286af091
 
 build:
+  number: 0
   script:
     - if: osx and arm64
       then: |
@@ -24,13 +25,15 @@ build:
         export CARGO_BUILD_RUSTFLAGS="-L${BUILD_PREFIX}/lib"
         export LDFLAGS="-L${BUILD_PREFIX}/lib -liconv"
     - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
-    - cargo install --no-track --locked --root ${{ PREFIX }} --path .
-
-  number: 0
+    - if: (linux and ppc64le) or (osx and arm64)
+      # The libduckdb-sys crate not appear to support the powerpc64le architecture
+      then: cargo install --no-track --locked --root ${{ PREFIX }} --path . --no-default-features --features "musl"
+      else: cargo install --no-track --locked --root ${{ PREFIX }} --path .
 
 requirements:
   build:
     - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
     - ${{ compiler('rust') }}
     - ${{ stdlib('c') }}
     - cargo-bundle-licenses
