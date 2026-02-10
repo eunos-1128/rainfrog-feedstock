@@ -21,9 +21,10 @@ build:
         export LIBICONV_LIB_DIR="${BUILD_PREFIX}/lib"
         export LIBICONV_INCLUDE_DIR="${BUILD_PREFIX}/include"
         export LIBGIT2_SYS_USE_PKG_CONFIG=1
-        export RUSTFLAGS="-L${BUILD_PREFIX}/lib -lc++ -liconv ${RUSTFLAGS:-}"
-        export LDFLAGS="-L${BUILD_PREFIX}/lib -liconv"
-        
+        export CXXFLAGS="${CXXFLAGS:-} -stdlib=libc++"
+        export LDFLAGS="${LDFLAGS:-} -L${BUILD_PREFIX}/lib -lc++ -liconv"
+        export RUSTFLAGS="-L${BUILD_PREFIX}/lib -C link-arg=-L${BUILD_PREFIX}/lib -C link-arg=-lc++ -C link-arg=-liconv ${RUSTFLAGS:-}"
+
     - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
     - if: linux and ppc64le
       then: cargo install --no-track --locked --root ${{ PREFIX }} --path . --no-default-features --features arboard
