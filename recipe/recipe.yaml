@@ -21,7 +21,7 @@ build:
         export LIBICONV_LIB_DIR="${BUILD_PREFIX}/lib"
         export LIBICONV_INCLUDE_DIR="${BUILD_PREFIX}/include"
         export LIBGIT2_SYS_USE_PKG_CONFIG=1
-        export RUSTFLAGS="-L${BUILD_PREFIX}/lib -l c++ -l iconv ${RUSTFLAGS:-}"
+        export RUSTFLAGS="-L${BUILD_PREFIX}/lib -lc++ -liconv ${RUSTFLAGS:-}"
         export LDFLAGS="-L${BUILD_PREFIX}/lib -liconv"
         
     - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
