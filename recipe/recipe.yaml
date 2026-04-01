@@ -12,11 +12,11 @@ source:
 
 build:
   number: 1
-  script: |
-    cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
-    if: linux and ppc64le
-    then: cargo install --no-track --locked --root ${{ PREFIX }} --path . --no-default-features --features arboard
-    else: cargo install --no-track --locked --root ${{ PREFIX }} --path .
+  script:
+    - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+    - if: linux and ppc64le
+      then: cargo install --no-track --locked --root ${{ PREFIX }} --path . --no-default-features --features arboard
+      else: cargo install --no-track --locked --root ${{ PREFIX }} --path .
 
 requirements:
   build:
