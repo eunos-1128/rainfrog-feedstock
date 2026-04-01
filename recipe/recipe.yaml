@@ -11,24 +11,12 @@ source:
   sha256: bc5aa6a366433531885fc6b730c8f6b03e405792bff54ca0e9168891b6d9f589
 
 build:
-  number: 0
-  script:
-    - if: osx and arm64
-      then: |
-        export LIBRARY_PATH="${BUILD_PREFIX}/lib:${LIBRARY_PATH:-}"
-        export LD_LIBRARY_PATH="${BUILD_PREFIX}/lib:${LD_LIBRARY_PATH:-}"
-        export DYLD_LIBRARY_PATH="${BUILD_PREFIX}/lib:${DYLD_LIBRARY_PATH:-}"
-        export LIBICONV_LIB_DIR="${BUILD_PREFIX}/lib"
-        export LIBICONV_INCLUDE_DIR="${BUILD_PREFIX}/include"
-        export LIBGIT2_SYS_USE_PKG_CONFIG=1
-        export CXXFLAGS="${CXXFLAGS:-} -stdlib=libc++"
-        export LDFLAGS="${LDFLAGS:-} -L${PREFIX}/lib -lc++"
-        export RUSTFLAGS="-L${PREFIX}/lib -C link-arg=-L${PREFIX}/lib -C link-arg=-lc++ ${RUSTFLAGS:-}"
-
-    - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
-    - if: linux and ppc64le
-      then: cargo install --no-track --locked --root ${{ PREFIX }} --path . --no-default-features --features arboard
-      else: cargo install --no-track --locked --root ${{ PREFIX }} --path .
+  number: 1
+  script: |
+    cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+    if: linux and ppc64le
+    then: cargo install --no-track --locked --root ${{ PREFIX }} --path . --no-default-features --features arboard
+    else: cargo install --no-track --locked --root ${{ PREFIX }} --path .
 
 requirements:
   build:
@@ -37,12 +25,11 @@ requirements:
     - ${{ compiler('rust') }}
     - ${{ stdlib('c') }}
     - cargo-bundle-licenses
-    - if: build_platform != target_platform
-      then: libiconv
 
 tests:
   - script:
       - rainfrog --version
+      - rainfrog --help
 
 about:
   homepage: https://crates.io/crates/rainfrog
